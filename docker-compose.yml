@@ -18,6 +18,7 @@ services:
       - OLLAMA_BASE_URLS=http://ollama:11434
       - RAG_EMBEDDING_ENGINE=ollama
       - RAG_EMBEDDING_MODEL=bge-m3:latest
+      - RAG_EMBEDDING_BATCH_SIZE=8
       - RAG_RERANKING_MODEL=BAAI/bge-reranker-v2-m3
       - ENABLE_RAG_HIBRID_SEARCH=True
       - RAG_SYSTEM_CONTEXT=true
