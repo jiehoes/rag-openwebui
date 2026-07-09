@@ -36,10 +36,14 @@ services:
   mcpo:
     image: ghcr.io/open-webui/mcpo:main
     container_name: mcpo
+    command: >
+      --config /app/config.json
+      --port 8000
+      --hot-reload
     volumes:
-      - ./mcpo-config.json:/app/config/config.json:ro
-    environment:
-      - BRAVE_API_KEY=${BRAVE_API_KEY}
+      - ./mcpo-config.json:/app/config.json:ro
+    env_file:
+      - .env
     restart: unless-stopped
 
   tika:
