@@ -1,0 +1,25 @@
+# Crawl4AI + REST Server
+# Build: docker build -t crawl4ai -f Dockerfile.crawl4ai .
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# Install system deps for Playwright
+RUN apt-get update -qq \
+    && apt-get install -y -qq --no-install-recommends \
+        libnss3 libnspr4 libatk-bridge2.0-0 libdrm2 \
+        libxkbcommon0 libxcomposite1 libxdamage1 \
+        libxrandr2 libgbm1 libpango-1.0-0 \
+        libcairo2 libasound2t64 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install crawl4ai + Playwright browsers
+RUN pip install crawl4ai -q --no-cache-dir \
+    && crawl4ai-setup
+
+# REST server wrapper
+COPY server.py /app/server.py
+
+EXPOSE 11235
+
+CMD ["python", "/app/server.py"]

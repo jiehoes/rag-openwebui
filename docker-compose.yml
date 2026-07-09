@@ -1,0 +1,94 @@
+# RAG OpenWebUI — Docker Stack
+#
+# Usage:
+#   docker compose up -d          # Start all services
+#   docker compose down           # Stop all services
+#   docker compose logs -f        # View logs
+#
+# Services:
+#   open-webui  :3000  AI Chat + RAG + Knowledge Base
+#   mcpo        :8000  Brave Search MCP → REST proxy
+#   tika        :9998  Document parser (PDF, DOCX, etc.)
+#   crawl4ai    :11235 Web crawler / loader
+#   ollama      :11434 BGE-M3 embedding model server
+
+services:
+  # ============================================================
+  # OpenWebUI — Main AI Chat & RAG interface
+  # ============================================================
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    ports:
+      - "3000:8080"
+    volumes:
+      - open-webui-data:/app/backend/data
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY:-}
+    restart: unless-stopped
+    depends_on:
+      - ollama
+      - tika
+      - crawl4ai
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  # ============================================================
+  # MCPO — MCP OpenAPI Proxy (Brave Search → REST)
+  # ============================================================
+  mcpo:
+    image: ghcr.io/open-webui/mcpo:main
+    container_name: mcpo
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./mcpo-config.json:/app/config/config.json:ro
+    environment:
+      - BRAVE_API_KEY=${BRAVE_API_KEY}
+    restart: unless-stopped
+
+  # ============================================================
+  # Apache Tika — Document parser
+  # ============================================================
+  tika:
+    image: apache/tika:latest
+    container_name: tika
+    ports:
+      - "9998:9998"
+    restart: unless-stopped
+
+  # ============================================================
+  # Crawl4AI — Web crawler / loader
+  # ============================================================
+  crawl4ai:
+    build:
+      context: .
+      dockerfile: Dockerfile.crawl4ai
+    container_name: crawl4ai
+    ports:
+      - "11235:11235"
+    restart: unless-stopped
+
+  # ============================================================
+  # Ollama — Embedding model server (BGE-M3)
+  # ============================================================
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-data:/root/.ollama
+    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
+volumes:
+  open-webui-data:
+  ollama-data:
