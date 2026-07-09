@@ -21,6 +21,8 @@ services:
       - RAG_RERANKING_MODEL=BAAI/bge-reranker-v2-m3
       - ENABLE_RAG_HIBRID_SEARCH=True
       - RAG_SYSTEM_CONTEXT=true
+      - CONTENT_EXTRACTION_ENGINE=tika
+      - TIKA_SERVER_URL=http://tika:9998
       - EXTERNAL_WEB_LOADER_URL=http://crawl4ai:11235/crawl
       - EXTERNAL_WEB_LOADER_API_KEY=none
       - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY:-}
