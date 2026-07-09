@@ -66,11 +66,23 @@ services:
     restart: unless-stopped
 
   open-terminal:
-    image: ubuntu:latest
+    image: ghcr.io/open-webui/open-terminal:0.11.34
     container_name: open-terminal
     stdin_open: true
     tty: true
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+          cpus: "2.0"
+    volumes:
+      - ./open-terminal-data:/home/user
+      - ./pip-cache:/home/user/.cache/pip
+    environment:
+      - TZ=Asia/Jakarta
+      - OPEN_TERMINAL_MAX_SESSIONS=8
+      - OPEN_TERMINAL_EXECUTE_TIMEOUT=30
 
   ollama:
     image: ollama/ollama:latest
