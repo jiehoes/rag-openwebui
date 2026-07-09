@@ -26,7 +26,7 @@ services:
       - EXTERNAL_WEB_LOADER_URL=http://crawl4ai:11235/crawl
       - EXTERNAL_WEB_LOADER_API_KEY=none
       - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY:-}
-      - CORS_ALLOW_ORIGIN="*"
+      - CORS_ALLOW_ORIGIN=*
       - WEBUI_AUTH=True
       - ENABLE_SIGNUP=True
       - TZ=Asia/Jakarta
