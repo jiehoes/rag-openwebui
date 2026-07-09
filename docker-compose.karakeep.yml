@@ -1,0 +1,45 @@
+# Karakeep — Self-hosted Bookmark Manager
+# Usage:
+#   docker compose -f docker-compose.karakeep.yml up -d
+#   docker compose -f docker-compose.karakeep.yml down
+
+services:
+  karakeep:
+    image: ghcr.io/karakeep-app/karakeep:release
+    container_name: karakeep
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - karakeep-data:/data
+    environment:
+      - NEXTAUTH_SECRET=${KARAKEEP_NEXTAUTH_SECRET}
+      - NEXTAUTH_URL=http://localhost:3000
+      - MEILI_ADDR=http://meilisearch:7700
+      - MEILI_MASTER_KEY=${KARAKEEP_MEILI_KEY}
+      - OPENAI_BASE_URL=https://api.deepseek.com/v1
+      - OPENAI_API_KEY=${DEEPSEEK_API_KEY}
+      - DATA_DIR=/data
+      - INFERENCE_LANG=id
+    depends_on:
+      meilisearch:
+        condition: service_healthy
+
+  meilisearch:
+    image: getmeili/meilisearch:v1.13
+    container_name: karakeep-meili
+    restart: unless-stopped
+    volumes:
+      - karakeep-meili-data:/meili_data
+    environment:
+      - MEILI_MASTER_KEY=${KARAKEEP_MEILI_KEY}
+      - MEILI_NO_ANALYTICS=true
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7700/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  karakeep-data:
+  karakeep-meili-data:
