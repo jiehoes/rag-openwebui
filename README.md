@@ -22,10 +22,9 @@ Buka http://localhost:9627
 | Service | Port | Fungsi |
 |---------|------|--------|
 | open-webui | 9627 | AI Chat + RAG |
-| mcpo | 18000 | Brave Search proxy |
-| tika | 19998 | Document parser |
-| crawl4ai | 11235 | Web crawler |
-| crawl4ai-proxy | 8001 | Proxy (clean content: remove ads, popups, shadow DOM) |
+| mcpo | — | Brave Search proxy (internal) |
+| tika | — | Document parser (internal) |
+| crawl4ai | — | Web crawler (internal) |
 | ollama | 11434 | BGE-M3 embedding |
 
 ## Konfigurasi OpenWebUI

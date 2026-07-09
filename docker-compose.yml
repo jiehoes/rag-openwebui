@@ -36,8 +36,6 @@ services:
   mcpo:
     image: ghcr.io/open-webui/mcpo:main
     container_name: mcpo
-    ports:
-      - "18000:8000"
     volumes:
       - ./mcpo-config.json:/app/config/config.json:ro
     environment:
