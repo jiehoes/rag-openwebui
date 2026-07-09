@@ -15,6 +15,8 @@ docker compose exec ollama ollama pull bge-m3   # download embedding model
 
 Buka http://localhost:9627
 
+> **First login**: klik **Sign up** — isi nama, email, password. Akun pertama otomatis jadi **admin**.
+
 ## Services
 
 | Service | Port | Fungsi |

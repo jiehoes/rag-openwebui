@@ -22,6 +22,8 @@ services:
       - EXTERNAL_WEB_LOADER_API_KEY=none
       - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY:-}
       - CORS_ALLOW_ORIGIN="*"
+      - WEBUI_AUTH=True
+      - ENABLE_SIGNUP=True
     restart: unless-stopped
     depends_on:
       - ollama
