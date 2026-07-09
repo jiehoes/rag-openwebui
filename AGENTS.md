@@ -18,8 +18,8 @@ Buka http://localhost:9627
 | Service | Port | Image |
 |---------|------|-------|
 | open-webui | 9627 | `ghcr.io/open-webui/open-webui:main` |
-| mcpo | 8000 | `ghcr.io/open-webui/mcpo:main` |
-| tika | 9998 | `apache/tika:latest` |
+| mcpo | 18000 | `ghcr.io/open-webui/mcpo:main` |
+| tika | 19998 | `apache/tika:latest` |
 | crawl4ai | 11235 | `unclecode/crawl4ai:latest` |
 | ollama | 11434 | `ollama/ollama:latest` |
 
