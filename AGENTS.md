@@ -11,13 +11,13 @@ docker compose up -d                        # start semua
 docker compose exec ollama ollama pull bge-m3  # download embedding
 ```
 
-Buka http://localhost:3000
+Buka http://localhost:9627
 
 ## Services
 
 | Service | Port | Image |
 |---------|------|-------|
-| open-webui | 3000 | `ghcr.io/open-webui/open-webui:main` |
+| open-webui | 9627 | `ghcr.io/open-webui/open-webui:main` |
 | mcpo | 8000 | `ghcr.io/open-webui/mcpo:main` |
 | tika | 9998 | `apache/tika:latest` |
 | crawl4ai | 11235 | Custom (`Dockerfile.crawl4ai`) |

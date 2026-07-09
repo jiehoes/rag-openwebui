@@ -13,13 +13,13 @@ docker compose up -d          # start semua
 docker compose exec ollama ollama pull bge-m3   # download embedding model
 ```
 
-Buka http://localhost:3000
+Buka http://localhost:9627
 
 ## Services
 
 | Service | Port | Fungsi |
 |---------|------|--------|
-| open-webui | 3000 | AI Chat + RAG |
+| open-webui | 9627 | AI Chat + RAG |
 | mcpo | 8000 | Brave Search proxy |
 | tika | 9998 | Document parser |
 | crawl4ai | 11235 | Web crawler |
