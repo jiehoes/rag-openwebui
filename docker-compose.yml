@@ -3,19 +3,9 @@
 # Usage:
 #   docker compose up -d          # Start all services
 #   docker compose down           # Stop all services
-#   docker compose logs -f        # View logs
-#
-# Services:
-#   open-webui  :3000  AI Chat + RAG + Knowledge Base
-#   mcpo        :8000  Brave Search MCP → REST proxy
-#   tika        :9998  Document parser (PDF, DOCX, etc.)
-#   crawl4ai    :11235 Web crawler / loader
-#   ollama      :11434 BGE-M3 embedding model server
+#   docker compose exec ollama ollama pull bge-m3
 
 services:
-  # ============================================================
-  # OpenWebUI — Main AI Chat & RAG interface
-  # ============================================================
   open-webui:
     image: ghcr.io/open-webui/open-webui:main
     container_name: open-webui
@@ -24,19 +14,20 @@ services:
     volumes:
       - open-webui-data:/app/backend/data
     environment:
-      - OLLAMA_BASE_URL=http://ollama:11434
+      - OLLAMA_BASE_URLS=http://ollama:11434
+      - RAG_EMBEDDING_ENGINE=ollama
+      - RAG_EMBEDDING_MODEL=bge-m3:latest
+      - RAG_RERANKING_MODEL=BAAI/bge-reranker-v2-m3
+      - EXTERNAL_WEB_LOADER_URL=http://crawl4ai:11235/crawl
+      - EXTERNAL_WEB_LOADER_API_KEY=none
       - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY:-}
+      - CORS_ALLOW_ORIGIN="*"
     restart: unless-stopped
     depends_on:
       - ollama
       - tika
       - crawl4ai
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
 
-  # ============================================================
-  # MCPO — MCP OpenAPI Proxy (Brave Search → REST)
-  # ============================================================
   mcpo:
     image: ghcr.io/open-webui/mcpo:main
     container_name: mcpo
@@ -48,9 +39,6 @@ services:
       - BRAVE_API_KEY=${BRAVE_API_KEY}
     restart: unless-stopped
 
-  # ============================================================
-  # Apache Tika — Document parser
-  # ============================================================
   tika:
     image: apache/tika:latest
     container_name: tika
@@ -58,9 +46,6 @@ services:
       - "9998:9998"
     restart: unless-stopped
 
-  # ============================================================
-  # Crawl4AI — Web crawler / loader
-  # ============================================================
   crawl4ai:
     build:
       context: .
@@ -70,9 +55,6 @@ services:
       - "11235:11235"
     restart: unless-stopped
 
-  # ============================================================
-  # Ollama — Embedding model server (BGE-M3)
-  # ============================================================
   ollama:
     image: ollama/ollama:latest
     container_name: ollama
