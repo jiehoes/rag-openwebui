@@ -43,10 +43,16 @@ services:
     restart: unless-stopped
 
   tika:
-    image: apache/tika:latest
+    image: apache/tika:3.3.0.0-full
     container_name: tika
-    ports:
-      - "9998:9998"
+    environment:
+      - JAVA_OPTS=-Xmx2g -Xms512m
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:9998/tika"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
     restart: unless-stopped
 
   crawl4ai:
