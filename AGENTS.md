@@ -1,6 +1,6 @@
 # RAG OpenWebUI — Context7 Verified Configuration
 
-Stack Docker: OpenWebUI + Ollama BGE-M3 + Brave Search + Crawl4AI + Tika.
+Stack Docker: OpenWebUI + Ollama BGE-M3 + Brave Search MCP + Crawl4AI + Tika + Open Terminal.
 
 ## Quick Start
 
@@ -8,41 +8,42 @@ Stack Docker: OpenWebUI + Ollama BGE-M3 + Brave Search + Crawl4AI + Tika.
 git clone https://github.com/jiehoes/rag-openwebui.git && cd rag-openwebui
 cp .env.example .env                        # isi BRAVE_API_KEY
 docker compose up -d                        # start semua
-docker compose exec ollama ollama pull bge-m3  # download embedding
+docker compose exec ollama ollama pull bge-m3
 ```
 
-Buka http://localhost:9627
+Buka http://localhost:9627 → **Sign up** (admin).
 
 ## Services
 
 | Service | Port | Image |
 |---------|------|-------|
 | open-webui | 9627 | `ghcr.io/open-webui/open-webui:main` |
-| mcpo | 18000 | `ghcr.io/open-webui/mcpo:main` |
-| tika | 19998 | `apache/tika:latest` |
-| crawl4ai | 11235 | `unclecode/crawl4ai:latest` |
-| ollama | 11434 | `ollama/ollama:latest` |
+| mcpo | — | `ghcr.io/open-webui/mcpo:main` (hot-reload) |
+| tika | — | `apache/tika:3.3.0.0-full` (OCR + healthcheck) |
+| crawl4ai | — | `unclecode/crawl4ai:latest` |
+| open-terminal | — | `ghcr.io/open-webui/open-terminal:0.11.34` |
+| ollama | 11434 | `ollama/ollama:latest` (GPU reserved) |
 
 ## Environment Variables (Context7 Verified)
 
-| Variable | Value | Doc Ref |
-|----------|-------|---------|
-| `OLLAMA_BASE_URLS` | `http://ollama:11434` | [Quick Start](https://docs.openwebui.com/getting-started/quick-start) |
-| `RAG_EMBEDDING_ENGINE` | `ollama` | [Performance](https://docs.openwebui.com/troubleshooting/performance) |
-| `RAG_EMBEDDING_MODEL` | `bge-m3:latest` | [Env Config](https://docs.openwebui.com/reference/env-configuration) |
-| `RAG_RERANKING_MODEL` | `BAAI/bge-reranker-v2-m3` | [Env Config](https://docs.openwebui.com/reference/env-configuration) |
-| `EXTERNAL_WEB_LOADER_URL` | `http://crawl4ai:11235/crawl` | [Env Config](https://docs.openwebui.com/reference/env-configuration) |
+| Variable | Value | Source |
+|----------|-------|--------|
+| `OLLAMA_BASE_URLS` | `http://ollama:11434` | Official |
+| `RAG_EMBEDDING_ENGINE` | `ollama` | Official |
+| `RAG_EMBEDDING_MODEL` | `bge-m3:latest` | Official |
+| `RAG_RERANKING_MODEL` | `BAAI/bge-reranker-v2-m3` | Official |
+| `ENABLE_RAG_HYBRID_SEARCH` | `True` | Official |
+| `RAG_SYSTEM_CONTEXT` | `true` | Official |
+| `CONTENT_EXTRACTION_ENGINE` | `tika` | Official |
+| `TIKA_SERVER_URL` | `http://tika:9998` | Official |
+| `EXTERNAL_WEB_LOADER_URL` | `http://crawl4ai:11235/crawl` | Official |
 
-## Konfigurasi OpenWebUI
+## Optional: Karakeep
 
-Setelah startup, tambahkan di Admin Panel:
-
-| Setting | Value |
-|---------|-------|
-| LLM Provider | OpenAI-compatible → `https://api.deepseek.com/v1` |
-| LLM Model | `deepseek-v4-pro` |
-| Function Calling | Native |
-| Web Search Engine | brave |
+```bash
+docker compose -f docker-compose.karakeep.yml up -d
+# Bookmark manager → http://localhost:3000
+```
 
 ## Troubleshooting
 
