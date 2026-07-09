@@ -29,6 +29,9 @@ services:
       - CORS_ALLOW_ORIGIN=*
       - WEBUI_AUTH=True
       - ENABLE_SIGNUP=True
+      - ENABLE_WEB_SEARCH=true
+      - WEB_SEARCH_ENGINE=brave
+      - BRAVE_SEARCH_API_KEY=${BRAVE_API_KEY}
       - TZ=Asia/Jakarta
     depends_on:
       - ollama
