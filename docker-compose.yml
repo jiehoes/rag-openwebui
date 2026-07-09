@@ -21,7 +21,7 @@ services:
       - RAG_RERANKING_MODEL=BAAI/bge-reranker-v2-m3
       - ENABLE_RAG_HIBRID_SEARCH=True
       - RAG_SYSTEM_CONTEXT=true
-      - EXTERNAL_WEB_LOADER_URL=http://crawl4ai:11235/crawl
+      - EXTERNAL_WEB_LOADER_URL=http://crawl4ai-proxy:8001/crawl
       - EXTERNAL_WEB_LOADER_API_KEY=none
       - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY:-}
       - CORS_ALLOW_ORIGIN="*"
@@ -56,8 +56,25 @@ services:
     container_name: crawl4ai
     ports:
       - "11235:11235"
-    shm_size: "1gb"
+    shm_size: "2gb"
     restart: unless-stopped
+
+  crawl4ai-proxy:
+    image: ghcr.io/byfebian/crawl4ai-proxy:v0.0.5
+    container_name: crawl4ai-proxy
+    ports:
+      - "8001:8001"
+    environment:
+      - LISTEN_PORT=8001
+      - CRAWLAI_ENDPOINT=http://crawl4ai:11235/crawl
+      - CRAWLAI_TIMEOUT_SECONDS=120
+      - REMOVE_CONSENT_POPUPS=true
+      - AVOID_ADS=true
+      - FLATTEN_SHADOW_DOM=true
+      - INCLUDE_REFERENCES=true
+    restart: unless-stopped
+    depends_on:
+      - crawl4ai
 
   ollama:
     image: ollama/ollama:latest

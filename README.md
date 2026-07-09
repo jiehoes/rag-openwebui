@@ -25,6 +25,7 @@ Buka http://localhost:9627
 | mcpo | 8000 | Brave Search proxy |
 | tika | 9998 | Document parser |
 | crawl4ai | 11235 | Web crawler |
+| crawl4ai-proxy | 8001 | Proxy (clean content: remove ads, popups, shadow DOM) |
 | ollama | 11434 | BGE-M3 embedding |
 
 ## Konfigurasi OpenWebUI

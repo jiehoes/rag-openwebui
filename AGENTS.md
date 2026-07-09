@@ -21,6 +21,7 @@ Buka http://localhost:9627
 | mcpo | 8000 | `ghcr.io/open-webui/mcpo:main` |
 | tika | 9998 | `apache/tika:latest` |
 | crawl4ai | 11235 | `unclecode/crawl4ai:latest` |
+| crawl4ai-proxy | 8001 | `ghcr.io/byfebian/crawl4ai-proxy:v0.0.5` |
 | ollama | 11434 | `ollama/ollama:latest` |
 
 ## Environment Variables (Context7 Verified)
