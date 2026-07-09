@@ -21,7 +21,7 @@ services:
       - RAG_RERANKING_MODEL=BAAI/bge-reranker-v2-m3
       - ENABLE_RAG_HIBRID_SEARCH=True
       - RAG_SYSTEM_CONTEXT=true
-      - EXTERNAL_WEB_LOADER_URL=http://crawl4ai-proxy:8001/crawl
+      - EXTERNAL_WEB_LOADER_URL=http://crawl4ai:11235/crawl
       - EXTERNAL_WEB_LOADER_API_KEY=none
       - WEBUI_SECRET_KEY=${WEBUI_SECRET_KEY:-}
       - CORS_ALLOW_ORIGIN="*"
@@ -62,9 +62,14 @@ services:
   crawl4ai:
     image: unclecode/crawl4ai:latest
     container_name: crawl4ai
-    ports:
-      - "11235:11235"
     shm_size: "2gb"
+    restart: unless-stopped
+
+  open-terminal:
+    image: ubuntu:latest
+    container_name: open-terminal
+    stdin_open: true
+    tty: true
     restart: unless-stopped
 
   ollama:
